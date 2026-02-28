@@ -1,0 +1,8 @@
+{
+  "name": "MediFlow - Clinic Management System",
+  "description": "A comprehensive medical management platform featuring role-based access, patient records, appointment scheduling, and AI-assisted prescriptions.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Management System - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f1419 0%, #1a1f28 50%, #1565c0 100%);
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.6s ease;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .auth-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .auth-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .auth-tab.active {
+            color: var(--primary-light);
+        }
+
+        .auth-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .role-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .role-option {
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .role-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(30, 136, 229, 0.1);
+        }
+
+        .role-option.selected {
+            background: rgba(30, 136, 229, 0.2);
+            border-color: var(--primary-color);
+            color: var(--primary-light);
+        }
+
+        .role-option input {
+            display: none;
+        }
+
+        .form-divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .form-divider::before,
+        .form-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .form-divider span {
+            margin: 0 15px;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .social-btn:hover {
+            background: rgba(30, 136, 229, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .auth-footer {
+            margin-top: 25px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .auth-footer a {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            font-size: 18px;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-light);
+        }
+
+        .form-group-password {
+            position: relative;
+        }
+
+        .error-text {
+            color: var(--danger-color);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.15);
+            color: #81c784;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            border-left: 3px solid #4caf50;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>HealthCare Pro</h1>
+                <p>Healthcare Management System</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form class="auth-form active" id="loginForm" data-tab="login">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="your@email.com" required>
+                    <div class="error-text" id="loginEmailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="form-group-password">
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">👁️</button>
+                    </div>
+                    <div class="error-text" id="loginPasswordError"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">
+                    Login to Account
+                </button>
+
+                <div class="auth-footer">
+                    Don't have an account? <span style="cursor: pointer; color: var(--primary-light);" onclick="switchTab('signup')">Sign Up</span>
+                </div>
+            </form>
+
+            <!-- Sign Up Form -->
+            <form class="auth-form" id="signupForm" data-tab="signup">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="signupName" class="form-control" placeholder="John Doe" required>
+                    <div class="error-text" id="signupNameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="signupEmail" class="form-control" placeholder="your@email.com" required>
+                    <div class="error-text" id="signupEmailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="form-group-password">
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Enter password (min. 6 characters)" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')">👁️</button>
+                    </div>
+                    <div class="error-text" id="signupPasswordError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <div class="role-selector">
+                        <label class="role-option">
+                            <input type="radio" name="role" value="patient" required>
+                            👤 Patient
+                        </label>
+                        <label class="role-option">
+                            <input type="radio" name="role" value="doctor">
+                            🩺 Doctor
+                        </label>
+                        <label class="role-option">
+                            <input type="radio" name="role" value="receptionist">
+                            📋 Receptionist
+                        </label>
+                        <label class="role-option">
+                            <input type="radio" name="role" value="admin">
+                            ⚙️ Admin
+                        </label>
+                    </div>
+                    <div class="error-text" id="signupRoleError"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Create Account
+                </button>
+
+                <div class="auth-footer">
+                    Already have an account? <span style="cursor: pointer; color: var(--primary-light);" onclick="switchTab('login')">Login</span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+
+    <script>
+        // Tab switching
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const forms = document.querySelectorAll('.auth-form');
+
+            tabs.forEach(tab => {
+                if (tab.getAttribute('data-tab') === tabName) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            forms.forEach(form => {
+                if (form.getAttribute('data-tab') === tabName) {
+                    form.classList.add('active');
+                } else {
+                    form.classList.remove('active');
+                }
+            });
+        }
+
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                switchTab(tab.getAttribute('data-tab'));
+            });
+        });
+
+        // Password toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        // Role selection styling
+        document.querySelectorAll('.role-option input').forEach(input => {
+            input.addEventListener('change', (e) => {
+                document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('selected'));
+                if (e.target.checked) {
+                    e.target.parentElement.classList.add('selected');
+                }
+            });
+        });
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearErrors();
+
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Validation
+            if (!email) {
+                showError('loginEmailError', 'Email is required');
+                return;
+            }
+            if (!Utils.validateEmail(email)) {
+                showError('loginEmailError', 'Invalid email format');
+                return;
+            }
+            if (!password) {
+                showError('loginPasswordError', 'Password is required');
+                return;
+            }
+
+            Utils.showLoading(true);
+
+            const result = await authManager.login(email, password);
+            Utils.hideLoading();
+
+            if (result.success) {
+                Utils.showSuccess('Login successful! Redirecting...');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            } else {
+                if (result.error.includes('user-not-found')) {
+                    showError('loginEmailError', 'User not found');
+                } else if (result.error.includes('wrong-password')) {
+                    showError('loginPasswordError', 'Incorrect password');
+                } else {
+                    Utils.showError(result.error);
+                }
+            }
+        });
+
+        // Sign up form submission
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearErrors();
+
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const role = document.querySelector('input[name="role"]:checked')?.value;
+
+            // Validation
+            if (!name) {
+                showError('signupNameError', 'Name is required');
+                return;
+            }
+            if (!email) {
+                showError('signupEmailError', 'Email is required');
+                return;
+            }
+            if (!Utils.validateEmail(email)) {
+                showError('signupEmailError', 'Invalid email format');
+                return;
+            }
+            if (!password) {
+                showError('signupPasswordError', 'Password is required');
+                return;
+            }
+            if (password.length < 6) {
+                showError('signupPasswordError', 'Password must be at least 6 characters');
+                return;
+            }
+            if (!role) {
+                showError('signupRoleError', 'Please select a role');
+                return;
+            }
+
+            Utils.showLoading(true);
+
+            const result = await authManager.register(email, password, role, name);
+            Utils.hideLoading();
+
+            if (result.success) {
+                Utils.showSuccess('Account created successfully! Redirecting...');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            } else {
+                if (result.error.includes('email-already-in-use')) {
+                    showError('signupEmailError', 'Email already in use');
+                } else {
+                    Utils.showError(result.error);
+                }
+            }
+        });
+
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-text').forEach(el => {
+                el.textContent = '';
+            });
+        }
+
+        // Check if user is already logged in
+        window.addEventListener('load', () => {
+            if (authManager.isAuthenticated()) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+</body>
+</html>
